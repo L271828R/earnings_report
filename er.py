@@ -27,6 +27,9 @@ if __name__ == '__main__':
     arr = []
     for ticker in tickers:
         r = collection.find({'ticker': ticker}).sort([('earnings-date-iso', -1)]).limit(0)[0]
+        if 'sector' not in r:
+            r['sector'] = 'None'
+
         if not r['earnings-date-iso'] in [None, '']:
             arr.append({
                 'ticker': r['ticker'], 

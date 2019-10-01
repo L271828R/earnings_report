@@ -7,10 +7,16 @@ from tickers import tickers
 
 def report(arr):
     _arr = sorted(arr, key = lambda x: x['date'])
+    madeLine = False
     for r in _arr:
         earnings_date = str(r['date'])
+        earnings_date_dt = datetime.datetime.strptime(earnings_date, "%Y-%m-%d 00:00:00")
+        today_dt = datetime.datetime.now()
+        if earnings_date_dt > today_dt and madeLine == False:
+            print("   --------------------------------")
+            madeLine = True
         market_cap = str(r['market-cap'])
-        ans = "{:<8}{:<22}{:<11}{}".format(
+        ans = "   {:<8}{:<22}{:<11}{}".format(
             r['ticker'], 
             earnings_date, 
             market_cap, 

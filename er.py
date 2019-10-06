@@ -67,12 +67,7 @@ def get_straddle_vols(conn, ticker):
         return []
     return arr
 
-def save_note(conn, date, ticker, percent_change_after_eod, percent_change_straddle, note):
-    obj = {'ticker': ticker,
-    'date': datetime.datetime.strptime(date, '%Y-%m-%d'),
-    'change_after_eod': percent_change_after_eod,
-    'change_straddle': percent_change_straddle,
-    'note':note}
+def save_note(conn, obj):
     conn.database.earnings_notes.save(obj)
     return True
 
@@ -86,17 +81,34 @@ def edit_screen(conn, arr):
     date = input('enter the date for earnings "yyyy-mm-dd"')
     percent_change_after_eod = input("enter the percent change at EOD")
     percent_change_straddle = input("percent impact on straddle")
+    percent_expected_straddle = input("percent expected on straddle")
+    percent_expected_days_for_straddle = input("percent expected days on straddle")
     print('')
     print('')
     print('summary:')
-    note = f"{percent_change_after_eod}={percent_change_straddle}"
+    note = f"expected={percent_expected_straddle} for {percent_expected_days_for_straddle} days actual={percent_change_after_eod}={percent_change_straddle}"
     print(date, ticker, note)
     ans = input('correct? [Y]es [N]o').lower()
+    obj = {
+        'date':datetime.datetime.strptime(date, '%Y-%m-%d'),
+        'ticker': ticker,
+        'percent_change_after_eod': percent_change_after_eod,
+        'percent_change_straddle': percent_change_straddle,
+        'percent_expected_straddle': percent_expected_straddle,
+        'percent_expected_days_for_straddle': percent_expected_days_for_straddle,
+        'note': note
+    }
     if ans == 'y':
-        save_note(conn, date, ticker, percent_change_after_eod, percent_change_straddle, note)
+        save_note(conn, obj)
 
 def get_tickers_with_notes(conn):
     return conn.database.earnings_notes.distinct('ticker')
+
+
+def show_notes(conn, ticker):
+    notes = conn.database.earnings_notes.find({'ticker':ticker})
+    for note in notes:
+        print(note['date'].strftime('%Y-%m-%d'), note['note'])
 
 if __name__ == '__main__':
     print('hello earnings report')
@@ -142,7 +154,10 @@ if __name__ == '__main__':
         if ans == 'e':
             edit_screen(conn, arr)
         if ans.isdigit():
-            print(arr[int(ans)]['ticker'])
+            ticker = arr[int(ans)]['ticker']
+            if ticker in tickers_with_notes:
+                show_notes(conn, ticker)
+                input()
             input('[ENTER]')
 
 

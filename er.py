@@ -28,8 +28,13 @@ def report(arr, param=None):
             vd = "{}={:<10} ".format(vol['d'], vol['be'])
             vds = vds + vd
 
-        ans = "{:<5}   {:<8}{:<22}{:<11}{:<30}{:<10}".format(
+        has_note = ""
+        if r['has_note']:
+            has_note = ">"
+
+        ans = "{:<5}   {:<1}{:<8}{:<22}{:<11}{:<30}{:<10}".format(
             index,
+            has_note,
             r['ticker'], 
             earnings_date, 
             market_cap, 
@@ -62,8 +67,14 @@ def get_straddle_vols(conn, ticker):
         return []
     return arr
 
-def save_note(date, ticker, s):
-    pass
+def save_note(conn, date, ticker, percent_change_after_eod, percent_change_straddle, note):
+    obj = {'ticker': ticker,
+    'date': datetime.datetime.strptime(date, '%Y-%m-%d'),
+    'change_after_eod': percent_change_after_eod,
+    'change_straddle': percent_change_straddle,
+    'note':note}
+    conn.database.earnings_notes.save(obj)
+    return True
 
 def edit_screen(conn, arr):
     print('\r\n edit screen...')
@@ -73,18 +84,19 @@ def edit_screen(conn, arr):
     print('entering for ', ticker)
     print("")
     date = input('enter the date for earnings "yyyy-mm-dd"')
-    percent_change_after_earning_eod = input("enter the percent change at EOD")
-    percent_pnl_for_straddle = input("percent impact on straddle")
+    percent_change_after_eod = input("enter the percent change at EOD")
+    percent_change_straddle = input("percent impact on straddle")
     print('')
     print('')
     print('summary:')
-    s = f"{percent_change_after_earning_eod}={percent_pnl_for_straddle}"
-    print(date, ticker, s)
+    note = f"{percent_change_after_eod}={percent_change_straddle}"
+    print(date, ticker, note)
     ans = input('correct? [Y]es [N]o').lower()
     if ans == 'y':
-        save_note(date, ticker, s)
+        save_note(conn, date, ticker, percent_change_after_eod, percent_change_straddle, note)
 
-
+def get_tickers_with_notes(conn):
+    return conn.database.earnings_notes.distinct('ticker')
 
 if __name__ == '__main__':
     print('hello earnings report')
@@ -93,6 +105,7 @@ if __name__ == '__main__':
     db = conn.database
     collection = db.basic_data
     arr = []
+    tickers_with_notes = get_tickers_with_notes(conn)
     for i, ticker in enumerate(tickers):
         r = collection.find({'ticker': ticker}).sort([('earnings-date-iso', -1)]).limit(0)[0]
         if 'sector' not in r:
@@ -108,6 +121,7 @@ if __name__ == '__main__':
 
             arr.append({
                 'ticker': r['ticker'], 
+                'has_note': r['ticker'] in tickers_with_notes,
                 'date':r['earnings-date-iso'], 
                 'sector': r['sector'],
                 'market-cap': r['market-cap'],

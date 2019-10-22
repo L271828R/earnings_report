@@ -3,26 +3,34 @@
 
 tickers=['spy',
 'mo',
+'ter', # Teradyne chip equip
+'lrcx', # Lam research chip equip
+'klac', # KLA Corp chip equip
 'aapl',
 'huya',
 'work',
-'shak',
+'stz', # contellation branks pot
+'jnj',
 'twlo',
 'mdb',
-#'lulu',
+'intc',
+'lulu',
+'shak',
 'pvtl',
 'zm',
 'docu',
 'gme',
 'tsla',
-'avgo',
+'avgo', # Broadcom
+'txn', # Texas instrument
 'orcl',
 'mu',
-'cost',
+'cost', # moved +.90% on earnigs date (10/4/2019)
 'goog',
 'bidu',
 'kl', # Kirkland Gold
 'nvda',
+'tsm', # Taiwan Semi Conductor
 'bynd',
 'eght',
 'amd',
@@ -44,7 +52,7 @@ tickers=['spy',
 'el',  # Estee Lauder Big Mover
 'shop',
 'uber',
-'qcom',
+'qcom', # Qualcom
 'tgt', # 20% on last earnings
 'splk',
 'jnug',
@@ -57,7 +65,7 @@ tickers=['spy',
 'ehth', # eHealth 
 'baba',
 'wmt',
-'amat',
+'amat', # Applied Materials
 'soxl',
 'soxs',
 'tru',

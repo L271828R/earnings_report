@@ -119,7 +119,11 @@ if __name__ == '__main__':
     arr = []
     tickers_with_notes = get_tickers_with_notes(conn)
     for i, ticker in enumerate(tickers):
-        r = collection.find({'ticker': ticker}).sort([('earnings-date-iso', -1)]).limit(0)[0]
+        # print('ticker=', ticker)
+        try:
+            r = collection.find({'ticker': ticker}).sort([('earnings-date-iso', -1)]).limit(0)[0]
+        except IndexError:
+            pass
         if 'sector' not in r:
             r['sector'] = 'None'
 

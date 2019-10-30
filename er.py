@@ -122,28 +122,28 @@ if __name__ == '__main__':
         # print('ticker=', ticker)
         try:
             r = collection.find({'ticker': ticker}).sort([('earnings-date-iso', -1)]).limit(0)[0]
-        except IndexError:
-            pass
-        if 'sector' not in r:
-            r['sector'] = 'None'
+            if 'sector' not in r:
+                r['sector'] = 'None'
 
-        if not r['earnings-date-iso'] in [None, '']:
-            vol_data = get_straddle_vols(conn, r['ticker'])
-            front = 0
-            try:
-                front = float(vol_data[0]['be'].strip("%"))
-            except:
+            if not r['earnings-date-iso'] in [None, '']:
+                vol_data = get_straddle_vols(conn, r['ticker'])
                 front = 0
+                try:
+                    front = float(vol_data[0]['be'].strip("%"))
+                except:
+                    front = 0
 
-            arr.append({
-                'ticker': r['ticker'], 
-                'has_note': r['ticker'] in tickers_with_notes,
-                'date':r['earnings-date-iso'], 
-                'sector': r['sector'],
-                'market-cap': r['market-cap'],
-                'vol_data': vol_data,
-                'front': front 
-                })
+                arr.append({
+                    'ticker': r['ticker'],
+                    'has_note': r['ticker'] in tickers_with_notes,
+                    'date':r['earnings-date-iso'], 
+                    'sector': r['sector'],
+                    'market-cap': r['market-cap'],
+                    'vol_data': vol_data,
+                    'front': front 
+                    })
+        except:
+            pass
     import sys
     param = None
     if len(sys.argv) > 1:

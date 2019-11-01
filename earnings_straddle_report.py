@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 import pymongo
-import numpy as np
 import datetime
 from tickers import tickers
 

@@ -20,7 +20,7 @@ def report(arr, param=None):
         "earnings date",
         "market cap",
         "sector",
-        "straddle bands"
+        "straddle bands  (days to expiration = straddle spread)"
     )   
 
     print("")

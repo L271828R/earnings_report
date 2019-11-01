@@ -7,7 +7,7 @@ This is a very specific report from the data that is gathered from the following
 
 The produced report looks as follows:
 
-
+<img src="https://i.imgur.com/Ma16anN.jpg" width="500">
 
 
 # Dependency

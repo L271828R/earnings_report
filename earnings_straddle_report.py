@@ -6,7 +6,6 @@ from tickers import tickers
 
 def report(arr, param=None):
     _arr = None
-    print('param=x', param)
     if param is None:
         _arr = sorted(arr, key = lambda x: x['date'])
     if param == 'sorted':
@@ -14,12 +13,26 @@ def report(arr, param=None):
 
     # print(_arr)
     madeLine = False
+    header = "{:<5}   {:<1}{:<8}{:<22}{:<11}{:<30}{:<10}".format(
+        "index",
+        "",
+        "ticker",
+        "earnings date",
+        "market cap",
+        "sector",
+        "straddle bands"
+    )   
+
+    print("")
+    print(header)
+    print("_" * 150)
+
     for index, r in enumerate(_arr):
         earnings_date = str(r['date'])
         earnings_date_dt = datetime.datetime.strptime(earnings_date, "%Y-%m-%d 00:00:00")
         today_dt = datetime.datetime.now()
         if earnings_date_dt > today_dt and madeLine == False and param is None:
-            print("   --------------------------------")
+            print("-" * 150)
             madeLine = True
         market_cap = str(r['market-cap'])
         vds = ""
@@ -40,6 +53,7 @@ def report(arr, param=None):
             r['sector'],
             vds 
             )
+
         try:
             if param is not None and r['vol_data'][0]['d'] > 11:
                 pass
@@ -110,7 +124,6 @@ def show_notes(conn, ticker):
         print(note['date'].strftime('%Y-%m-%d'), note['note'])
 
 if __name__ == '__main__':
-    print('hello earnings report')
     time_stamps = []
     conn = MongoClient()
     db = conn.database

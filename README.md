@@ -16,6 +16,10 @@ A straddle band of 3=15.4% means that in 3 days, the underlying price needs to m
 position, or needs to move less than 15.4% for a straddle position to be profitable for a short position.
 
 
+If for a particular straddle band, the earnings date overlaps. One can historically see how much of a premium the earnings event affects the
+straddle spread.
+
+
 Data gathering programs:
 
 * equity_basic_data_scrapper => obtains the earnings date for an equity/ticker

@@ -29,13 +29,15 @@ The produced report looks as follows:
 
 <img src="https://i.imgur.com/Ma16anN.jpg" width="500">
 
+You may notice a '-----' line divider within the report. This devides earning dates that are in the future from today and those that have passed.
 
 # Dependency
 
 * Python3
-* MongoClient
+* MongoClient (pymongo)
 
 # How to run
 
+python earnings_straddle_report
 
 
